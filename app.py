@@ -3,7 +3,6 @@ from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -13,8 +12,8 @@ ma = Marshmallow(app)
 
 class Emp(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    username = db.Column(db.String(200), nullable=False, unique=True)
-    email = db.Column(db.String(200), nullable=False, unique=True)
+    username = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(200), nullable=False)
     department = db.Column(db.String(200), nullable=False)
     date_joined = db.Column(db.DateTime, default=datetime.isoformat)
 
@@ -37,17 +36,48 @@ class PeopleSchema(ma.Schema):
 people_schema = PeopleSchema()
 
 
-@app.route('/api/people', methods=['GET'])
-def get_people():
-    all_people = Emp.query.all()
-    result = people_schema.dump(all_people, many=True)
-    return jsonify(result)
-
-
-@app.route('/api/people/<id>', methods=['GET'])
+@app.route('/api/users/<id>', methods=['GET'])
 def get_man(id):
     man = Emp.query.get(id)
     return people_schema.jsonify(man)
+
+
+@app.route('/api/users', methods=['GET'])
+def user_items_api():
+    user = request.args.get("username")
+    department = request.args.get("department")
+
+    if user != None:
+
+        items = Emp.query.filter(Emp.username.contains(user))
+        result = people_schema.dump(items, many=True)
+        return jsonify(result)
+
+    elif department != None:
+
+        items = Emp.query.filter(Emp.department.contains(department))
+        result = people_schema.dump(items, many=True)
+        return jsonify(result)
+
+    else:
+        items = Emp.query.all()
+        result = people_schema.dump(items, many=True)
+        return jsonify(result)
+
+
+@app.route('/api/department', methods=['GET'])
+def department_items_api():
+    department = request.args.get("name")
+    if department != None:
+
+        item = Emp.query.filter(Emp.department.contains(department)).with_entities((Emp.department)).distinct()
+        result = people_schema.dump(item, many=True)
+        return jsonify(result)
+
+    else:
+        item = Emp.query.with_entities(Emp.department)
+        result = people_schema.dump(item, many=True)
+        return jsonify(result)
 
 
 @app.route('/api/addnew', methods=['POST'])
@@ -90,9 +120,11 @@ def delete_man(id):
     db.session.commit()
     return people_schema.jsonify(man)
 
+
 @app.route('/')
 def hello_app():
-    return 'Welcome!'
+    return 'Welcome to test web app!'
+
 
 @app.route('/users')
 def user_items():
@@ -113,8 +145,9 @@ def user_items():
         items = Emp.query.all()
         return render_template('users.html', items=items)
 
+
 @app.route('/department')
-def deparment_items():
+def department_items():
     department = request.args.get("name")
     if department != None:
         items = Emp.query.filter(Emp.department.contains(department)).with_entities((Emp.department)).distinct()
@@ -125,6 +158,7 @@ def deparment_items():
         items = Emp.query.with_entities(Emp.department)
 
         return render_template('users.html', items=items)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -8,7 +8,7 @@ try:
     sqlite_insert_query = """INSERT INTO emp
                           (id, username, email, department, date_joined)
                           VALUES
-                          (4, 'Badjaj Aqumba', 'aqumba@gmail.com','sales', '1950-05-01 09:25:10' );"""
+                          (11, 'Rakamakofo', 'raka@gmail.com','sales', '1975-04-11 09:26:10' );"""
     count = cursor.execute(sqlite_insert_query)
     sqlite_connection.commit()
     print("Запись успешно вставлена ​​ в таблицу app ", cursor.rowcount)
