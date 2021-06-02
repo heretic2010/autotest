@@ -1,7 +1,7 @@
 import pytest
-from app import db
-from app import app as flask_app
 
+from app import app as flask_app
+import json
 
 @pytest.fixture
 def app():
@@ -11,6 +11,9 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+
+
 
 
 
