@@ -3,14 +3,16 @@ from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 
-class Emp(db.Model):
+class Emp(db.Model): #модель базы данных
     id = db.Column(db.Integer, primary_key=True, unique=True)
     username = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False)
@@ -28,7 +30,7 @@ class Emp(db.Model):
         return 'User %r' % self.id
 
 
-class PeopleSchema(ma.Schema):
+class PeopleSchema(ma.Schema): # сериализация базы данных
     class Meta:
         fields = ('id', 'username', 'email', 'department', 'date_joined')
 
@@ -36,13 +38,14 @@ class PeopleSchema(ma.Schema):
 people_schema = PeopleSchema()
 
 
-@app.route('/api/users/<id>', methods=['GET'])
+
+@app.route('/api/users/<id>', methods=['GET']) # выдает информацию сотруднике в джейсон формате по его id
 def get_man(id):
     man = Emp.query.get(id)
     return people_schema.jsonify(man)
 
 
-@app.route('/api/users', methods=['GET'])
+@app.route('/api/users', methods=['GET']) # выдает список сотрудников в джейсон формате, эндпоинты /users?username=<частичное или полное имя пользователя>, /users?department=<частичное или полное имя департамента>
 def user_items_api():
     user = request.args.get("username")
     department = request.args.get("department")
@@ -65,7 +68,7 @@ def user_items_api():
         return jsonify(result)
 
 
-@app.route('/api/department', methods=['GET'])
+@app.route('/api/department', methods=['GET']) # выдает список департаментов в джейсон формате, эндпоинты: /department?name=<частичное или полное название департамента>
 def department_items_api():
     department = request.args.get("name")
     if department != None:
@@ -80,7 +83,7 @@ def department_items_api():
         return jsonify(result)
 
 
-@app.route('/api/addnew', methods=['POST'])
+@app.route('/api/addnew', methods=['POST']) # добавляет нового сотрудника
 def add_man():
     id = request.json['id']
     username = request.json['username']
@@ -94,7 +97,7 @@ def add_man():
     return people_schema.jsonify(new_man)
 
 
-@app.route('/api/update/<id>', methods=['PUT'])
+@app.route('/api/update/<id>', methods=['PUT']) # обновляет данные о сотруднике по id
 def update_man(id):
     people = Emp.query.get(id)
     id = request.json['id']
@@ -113,7 +116,7 @@ def update_man(id):
     return people_schema.jsonify(people)
 
 
-@app.route('/api/delete/<id>', methods=['DELETE'])
+@app.route('/api/delete/<id>', methods=['DELETE']) # удаляет из базы данных информацию о сотруднике по id
 def delete_man(id):
     man = Emp.query.get(id)
     db.session.delete(man)
@@ -126,7 +129,7 @@ def hello_app():
     return 'Welcome to test web app!'
 
 
-@app.route('/users')
+@app.route('/users') # вывод списка пользователей из базы данных эндпоинты: /users?username=<частичное или полное имя пользователя>, /users?department=<частичное или полное имя департамента>
 def user_items():
     user = request.args.get("username")
     department = request.args.get("department")
@@ -146,7 +149,7 @@ def user_items():
         return render_template('users.html', items=items)
 
 
-@app.route('/department')
+@app.route('/department') # вывод списка департаментов из базы данных эндпоинты: /department?name=<частичное или полное назжвание департамента>
 def department_items():
     department = request.args.get("name")
     if department != None:
@@ -155,7 +158,7 @@ def department_items():
         return render_template('users.html', items=items)
 
     else:
-        items = Emp.query.with_entities(Emp.department)
+        items = Emp.query.with_entities(Emp.department).distinct()
 
         return render_template('users.html', items=items)
 
