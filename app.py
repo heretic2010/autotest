@@ -30,7 +30,7 @@ class Emp(db.Model): #модель базы данных
         return 'User %r' % self.id
 
 
-class PeopleSchema(ma.Schema): # сериализация базы данных
+class PeopleSchema(ma.Schema): #сериализация данных
     class Meta:
         fields = ('id', 'username', 'email', 'department', 'date_joined')
 
@@ -164,4 +164,4 @@ def department_items():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=3000, debug=True)

@@ -4,13 +4,6 @@ import pytest
 
 from app import people_schema, Emp
 
-'''
-
-Данное чудо тестит только 1 раз и нужно заново подкладывать бд - не реализован rallback() баззы данных.
-
-
-
-'''
 
 # проверка соответсвия имени пользователя в запросе и полученном json ответе \ проверяет все имена в базе данных
 def test_check_content_type_names(client, username):
@@ -27,6 +20,7 @@ def test_check_content_not_full_name(client, parts_username):
 
     assert response.headers["Content-Type"] == "application/json"
     assert data[0]['username'].startswith(parts_username)
+
 
 # проверка ответа на запрос по имени департамента
 def test_check_content_department(client, all_dep):
@@ -80,13 +74,17 @@ def test_put(client):
 
     data = json.loads(response.get_data(as_text=True))
 
+    man = Emp.query.get(11)
+    result = people_schema.dump(man)
+
     assert response.status_code == 200
 
-    assert data['email'] == 'H123_Djo@gmail.com'
+    assert data['username'] == result['username']
 
 
-# удаление информации о сотруднике из бд
-def test_delete(client):
+# удаление информации о сотруднике из бд | support_for_delete обнавляет значения базы данных для прохождения тестов test_delete, test_put, test_add
+def test_delete(client, support_for_delete):
+    support_for_delete
     response = client.delete(
         '/api/delete/4',
         data=json.dumps(
