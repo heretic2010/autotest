@@ -2,7 +2,7 @@ import pytest
 
 from app import people_schema, Emp
 
-"""Тесты проходят через http://192.168.99.100:3000 по причине установлененого Docker toolbox -  
+""" Если запускать тесты из под Docker Toolbox необходимо изменить routs в conftest.py -  
 IP address of the Docker Toolbox virtual machine: host> docker-machine ip default 192.168.99.100 """
 
 
