@@ -15,7 +15,7 @@ import requests
 @pytest.fixture()
 
 def paths():
-    routs = 'http://192.168.99.100:3000'
+    routs = 'http://127.0.0.1:3000/'
     return routs
 
 @pytest.fixture
