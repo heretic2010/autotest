@@ -1,5 +1,5 @@
 from datetime import datetime
-from app import app as flask_app
+# from app import app as flask_app
 from random import randint
 import pytest
 import os.path
@@ -7,14 +7,20 @@ import logging
 from app import people_schema, Emp
 
 import sqlite3
-@pytest.fixture
-def app():
-    yield flask_app
+import requests
+# вариант тестирования через встроенный тестовый клиент фласка, первоначально тесты запускались с ним, осатвленн как альтернативный вариант
+# @pytest.fixture
+# def app():
+#     yield flask_app
+@pytest.fixture()
 
+def paths():
+    routs = 'http://192.168.99.100:3000'
+    return routs
 
 @pytest.fixture
-def client(app):
-    return app.test_client()
+def client():
+    return requests # не понял задачу по тестовому клиенту и решил реализовать вот так -_-
 
 # создвает список имен сотрудников содержащихся в базе данных
 def all_name():
@@ -60,24 +66,25 @@ def username(request):
 @pytest.fixture(params=half_names())
 def parts_username(request):
     return request.param
-
+#  фикстура для проверки эндпоинта api department
 @pytest.fixture(params=all_departments())
 def all_dep(request):
     return request.param
 
+# хук для логирования в файл
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
 
 
-    outcome = yield
-    rep = outcome.get_result()
+    outcome = yield # обработка идет после прохождения тестов
+    rep = outcome.get_result()  # получение результатов
     date = datetime.now().strftime("%Y_%m_%d-%H_%M")
 
-
+    # вызовы упавших тестов
     if rep.when == "call" and rep.failed:
-        mode = "a" if os.path.exists(f"report_{date}.txt") else "w"
-        with open(f"report_{date}.txt", mode) as f:
+        mode = "a" if os.path.exists(f"volume_path/report_{date}.txt") else "w"
+        with open(f"volume_path/report_{date}.txt", mode) as f:
 
             if "tmp_path" in item.fixturenames:
                 extra = " ({})".format(item.funcargs["tmp_path"])
@@ -87,10 +94,10 @@ def pytest_runtest_makereport(item, call):
             f.write('[FAILED]: ' + rep.nodeid + extra + "\n")
             logging.info('[FAILED]: ' + rep.nodeid + ' ' + extra + " " + date)
 
-
+    # вызовы успешно пройденных тестов
     elif rep.when == "call" and rep.passed:
-        mode = "a" if os.path.exists(f'report_{date}.txt') else "w"
-        with open(f"report_{date}.txt", mode) as f:
+        mode = "a" if os.path.exists(f'volume_path/report_{date}.txt') else "w"
+        with open(f"volume_path/report_{date}.txt", mode) as f:
 
             if "tmp_path" in item.fixturenames:
                 extra = " ({})".format(item.funcargs["tmp_path"])
@@ -100,24 +107,24 @@ def pytest_runtest_makereport(item, call):
             f.write('[PASSED]: ' +rep.nodeid + extra + "\n")
             logging.info('[PASSED]: ' + rep.nodeid + ' '+ extra + " "+ date)
 
-# делает необходимые изменения в базе данных для прохождения тестов
+# делает необходимые изменения в базе данных для повторного прохождения тестов \ костыльный rollback db
 @pytest.fixture
 def support_for_delete():
     try:
-        sqlite_connection = sqlite3.connect('app.db')
+        sqlite_connection = sqlite3.connect('volume_path/app.db')
         cursor = sqlite_connection.cursor()
         print("Подключен к SQLite")
 
         sqlite_insert_query = """INSERT INTO emp
                               (id, username, email, department, date_joined)
                               VALUES
-                              (4, 'Badjaj Aqumba', 'aqumba@gmail.com','sales', '1950-05-01 09:25:10' );"""
+                              (4, 'Badjaj Aqumba', 'aqumba@gmail.com','sales', '1950-05-01 09:25:10' );"""  # добавляет запись о пользователе в базу данных
 
 
         sqlite_insert_query2 = """Update emp set username = 'Rakamakofo', email = 'raka@gmail.com', 
         department = 'sales', date_joined = '1975-04-11 09:26:10' WHERE id = 11;
-        """
-        sqlite_insert_query3 = """DELETE from emp where id = 8;"""
+        """                                                                                                  # откатывает изменения в базе данных
+        sqlite_insert_query3 = """DELETE from emp where id = 8;"""                                           # удаляет запись с "айди" 8 из базы данных
         cursor.execute(sqlite_insert_query)
         cursor.execute(sqlite_insert_query2)
         cursor.execute(sqlite_insert_query3)
@@ -134,3 +141,7 @@ def support_for_delete():
             sqlite_connection.close()
             print("Соединение с SQLite закрыто")
     yield
+
+@pytest.fixture(autouse=True) # stdout
+def stdout_msg():
+    print("O_o", end=' ')
