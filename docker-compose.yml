@@ -1,0 +1,30 @@
+version: '3.3'
+
+
+services:
+  web:
+    volumes:
+      - C:\\Users\\Администратор\\Desktop\\test_volume:/usr/src/app/volume_path # общая папка для контейнеров web и client, содержит базу данных, для запуска необходимо указатьабсолютный путь на локальной машине
+    build:
+      context: . # C:\Users\Администратор\Desktop\autotest2 путь до файлов для сборки и докерфайла который собирает образ
+      dockerfile: Dockerfile # файл с инструкцией для сборки контейнера
+    container_name: web # имя контейнера
+    ports:
+      - 3000:3000 # проброс портов для подключения к веб приложению: внутренний : внешний
+
+
+  client:
+    volumes:
+      - C:\\Users\\Администратор\\Desktop\\test_volume:/usr/src/app/volume_path
+    build:
+      context: . # C:\Users\Администратор\Desktop\autotest2 путь до файлов для сборки и докерфайла который собирает образ
+      dockerfile: C:\Users\Администратор\Desktop\autotest2\tests\Dockerfile
+
+    entrypoint: sh -c "pytest" # команда зупускающая тесты как толкьо соберется контейнер
+    network_mode: host
+    depends_on: # команда для правильной очередности запуска сервисов(при ее отстутствии один из тестов запускается раньше запуска веб приложения и "падает")
+      - web
+
+
+
+
