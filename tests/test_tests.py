@@ -120,5 +120,4 @@ def test_user(client, paths):
     response = client.get(f'{paths}')
 
     assert response.status_code == 200
-    # assert response.headers[0][1] == "text/html; charset=utf-8"
-    # assert response.headers[1][1] == "24"
+
