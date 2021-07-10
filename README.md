@@ -39,7 +39,9 @@ DELETE:
   - Flask==1.1.2
   - marshmallow-sqlalchemy
   - requests==2.25.1
-
+  
+**Docker-compose**
+  
 Для запуска тестов и приложения используйте команду:
 docker-compose up
 
