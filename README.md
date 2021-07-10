@@ -40,8 +40,6 @@ Flask==1.1.2
 marshmallow-sqlalchemy
 requests==2.25.1
 
-До запуска тестов необходимо указать путь до базы данных в файле docker-compose.yml, а так же путь для сохранения логов в pytest.ini
-
 Для запуска тестов и приложения используйте команду:
 docker-compose up
 
