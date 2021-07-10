@@ -11,7 +11,7 @@
 В качестве базы данных используется SQLite3.
 Для тестирования веб-сервиса использовался фреймворк pytest.
 
-Endpoints:
+**Endpoints:**
 GET:
 - / 
 - /department:
@@ -32,13 +32,13 @@ PUT:
 DELETE:
   - /api/delete/<id>
 
-Использованные библиотеки:
-Flask_SQLAlchemy==2.5.1
-flask_marshmallow==0.14.0
-pytest==6.2.4
-Flask==1.1.2
-marshmallow-sqlalchemy
-requests==2.25.1
+**Использованные библиотеки:**
+  Flask_SQLAlchemy==2.5.1
+  flask_marshmallow==0.14.0
+  pytest==6.2.4
+  Flask==1.1.2
+  marshmallow-sqlalchemy
+  requests==2.25.1
 
 Для запуска тестов и приложения используйте команду:
 docker-compose up
