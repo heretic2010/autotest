@@ -113,7 +113,7 @@ def support_for_delete():
     try:
         sqlite_connection = sqlite3.connect('volume_path/app.db')
         cursor = sqlite_connection.cursor()
-        print("Подключен к SQLite")
+        print("\n Подключен к SQLite")
 
         sqlite_insert_query = """INSERT INTO emp
                               (id, username, email, department, date_joined)
