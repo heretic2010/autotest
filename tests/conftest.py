@@ -130,7 +130,7 @@ def support_for_delete():
         cursor.execute(sqlite_insert_query3)
         sqlite_connection.commit()
 
-        print("Запись успешно вставлена ​​ в таблицу app ", cursor.rowcount)
+        print("Запись успешно вставлена ​​ в таблицу Emp ", cursor.rowcount)
 
         cursor.close()
 
