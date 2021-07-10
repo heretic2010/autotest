@@ -135,11 +135,11 @@ def support_for_delete():
         cursor.close()
 
     except sqlite3.Error as error:
-        print("Ошибка при работе с SQLite", error)
+        print("\n Ошибка при работе с SQLite", error)
     finally:
         if sqlite_connection:
             sqlite_connection.close()
-            print("Соединение с SQLite закрыто")
+            print("\n Соединение с SQLite закрыто")
     yield
 
 @pytest.fixture(autouse=True) # stdout

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3f6cce4d-3c26-4fe0-ab16-035d4d6ac231" name="Default Changelist" comment="some path changes, added volume to git">
+    <list default="true" id="3f6cce4d-3c26-4fe0-ab16-035d4d6ac231" name="Default Changelist" comment="conftest.py \n">
       <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -303,7 +303,21 @@
       <option name="project" value="LOCAL" />
       <updated>1625926759300</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="conftest.py \n">
+      <created>1625926991007</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1625926991007</updated>
+    </task>
+    <task id="LOCAL-00021" summary="conftest.py \n">
+      <created>1625927163555</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1625927163555</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -341,7 +355,8 @@
     <MESSAGE value="some updates" />
     <MESSAGE value="latest version" />
     <MESSAGE value="some path changes, added volume to git" />
-    <option name="LAST_COMMIT_MESSAGE" value="some path changes, added volume to git" />
+    <MESSAGE value="conftest.py \n" />
+    <option name="LAST_COMMIT_MESSAGE" value="conftest.py \n" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
