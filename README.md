@@ -6,7 +6,8 @@
 - username
 - email
 - department 
-- date_joined (YYYY-MM-DDThh:mm:ss)
+- date_joined
+
 Приложение написанно с использованием фреймворка Flask.
 В качестве базы данных используется SQLite3.
 Для тестирования веб-сервиса использовался фреймворк pytest.
