@@ -18,25 +18,33 @@
 GET:
 - / 
 - /department:
+
   /department?name={department_name}
+  
 - /users:
+
   /users?department={department_name}
+  
   /users?username={user_name}
   
 GET:
 - /api:
+
   /api/users?department={department_name}
   /api/users?username={user_name}
   /api/users/<id>
   /api/department
   
 POST:
+  
   - /api/addnew 
   
 PUT:
+  
   - /api/update/<id>
   
 DELETE:
+  
   - /api/delete/<id>
 
 **Использованные библиотеки:**
